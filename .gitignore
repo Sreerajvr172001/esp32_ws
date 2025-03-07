@@ -1,0 +1,17 @@
+# ESP32 compiled binaries and build files
+build/
+*.bin
+*.elf
+*.map
+
+# SDK and config files
+sdkconfig
+sdkconfig.old
+
+# Debug logs
+*.log
+
+# System files
+.vscode/
+.DS_Store
+*.swp
