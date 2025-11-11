@@ -47,8 +47,8 @@ struct PIDController
   float output;
 };
 
-PIDController pid_left = {1.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-PIDController pid_right = {1.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+PIDController pid_left = {2.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+PIDController pid_right = {2.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
 const float CONTROL_INTERVAL = 0.1;
 long last_control_time = 0;
