@@ -64,8 +64,8 @@ HardwareSerial SERIAL_PORT(2);  //#define SERIAL_PORT Serial2
 const unsigned long WATCHDOG_MS = 2000;
 
 // Mapping ticks/sec range
-const float MAX_TICKS_PER_SEC = 360;
-const float ENCODER_TICKS_PER_REV = 148;
+const float MAX_TICKS_PER_SEC = 2000;
+const float ENCODER_TICKS_PER_REV = 1056;
 
 const int min_pwm = 150;
 const int max_pwm = 255;
