@@ -28,12 +28,12 @@ volatile long right_enc_pos = 0;
 volatile long prev_count_left = 0;
 volatile long prev_count_right = 0;
 
-volatile long measured_speed_left = 0;
-volatile long measured_speed_right = 0;
+volatile float measured_speed_left = 0;
+volatile float measured_speed_right = 0;
 
 // --- State Variables ---
-volatile long setpoint_ticks_l = 0;
-volatile long setpoint_ticks_r = 0;
+volatile float setpoint_ticks_l = 0;
+volatile float setpoint_ticks_r = 0;
 unsigned long last_millis_cmd = 0;
 
 // PID parameters
