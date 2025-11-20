@@ -163,7 +163,8 @@ void process_command(const String &cmd) {
   if (s.length() == 0) return;
   char c = s.charAt(0);
 
-  if (c == 'm') {
+  if (c == 'm') 
+  {
     SERIAL_PORT.print("OK\n");
     SERIAL_PORT.flush();    
     float l = 0, r = 0;
@@ -187,7 +188,9 @@ void process_command(const String &cmd) {
       //apply_pwm_to_motor(pwr, MOTOR_RIGHT_IN1, MOTOR_RIGHT_IN2, pwmChannel1);
       
     }
-  } else if (c == 'e') {
+  } 
+  else if (c == 'e') 
+  {
     int l, r;
     noInterrupts();
     l = left_enc_pos;
@@ -203,7 +206,9 @@ void process_command(const String &cmd) {
     Serial.print(" Right: ");
     Serial.println(r);
 
-  } else if (c == 'r') {
+  } 
+  else if (c == 'r') 
+  {
     noInterrupts();
     left_enc_pos = 0;
     right_enc_pos = 0;
@@ -244,7 +249,9 @@ void process_command(const String &cmd) {
       }
       SERIAL_PORT.printf("RIGHT PID UPDATED: %.3f, %.3f, %.3f\r\n", Kp, Ki, Kd);
     }
-  } else if (c == 'p') {
+  } 
+  else if (c == 'p') 
+  {
     SERIAL_PORT.print("OK\r\n");
   }
 }
