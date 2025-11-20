@@ -208,23 +208,41 @@ void process_command(const String &cmd) {
     left_enc_pos = 0;
     right_enc_pos = 0;
     interrupts();
-  } else if (c == 'u') {
+  } 
+  else if (c == 'l') 
+  {
     float Kp=0, Ki=0, Kd=0;
-    int num = sscanf(s.c_str(), "u %f %f %f", &Kp, &Ki, &Kd);
-    if (num >= 1) {
+    int num = sscanf(s.c_str(), "l %f %f %f", &Kp, &Ki, &Kd);
+    if (num >= 1) 
+    {
       pid_left.Kp = Kp;
-      pid_right.Kp = Kp;
       if (num >= 2) 
       {
         pid_left.Ki = Ki;
-        pid_right.Ki = Ki;
       } 
       if (num >= 3) 
       {
         pid_left.Kd = Kd;
+      }
+      SERIAL_PORT.printf("LEFT PID UPDATED: %.3f, %.3f, %.3f\r\n", Kp, Ki, Kd);
+    }
+  } 
+  else if (c == 'n') 
+  {
+    float Kp=0, Ki=0, Kd=0;
+    int num = sscanf(s.c_str(), "n %f %f %f", &Kp, &Ki, &Kd);
+    if (num >= 1) 
+    {
+      pid_right.Kp = Kp;
+      if (num >= 2) 
+      {
+        pid_right.Ki = Ki;
+      } 
+      if (num >= 3) 
+      {
         pid_right.Kd = Kd;
       }
-      SERIAL_PORT.printf("U:%.3f,%.3f,%.3f\r\n", Kp, Ki, Kd);
+      SERIAL_PORT.printf("RIGHT PID UPDATED: %.3f, %.3f, %.3f\r\n", Kp, Ki, Kd);
     }
   } else if (c == 'p') {
     SERIAL_PORT.print("OK\r\n");
@@ -308,7 +326,7 @@ void loop() {
     apply_pwm_to_motor(pwm_right, MOTOR_RIGHT_IN1, MOTOR_RIGHT_IN2, pwmChannel1);
 
     // Debugging output
-    Serial.printf("Setpoints L:%ld R:%ld | Measured L:%ld R:%ld | PWM L:%d R:%d\n", 
+    Serial.printf("Setpoints L:%f R:%f | Measured L:%f R:%f | PWM L:%d R:%d\n", 
                   setpoint_ticks_l, setpoint_ticks_r, 
                   measured_speed_left, measured_speed_right, 
                   pwm_left, pwm_right);
