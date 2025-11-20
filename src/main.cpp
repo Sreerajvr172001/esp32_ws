@@ -118,6 +118,8 @@ float computePID(PIDController &pid, float target, float measured)
   float derivative = (error - pid.prev_error) / dt;
   pid.output = pid.Kp * error + pid.Ki * pid.integral + pid.Kd * derivative;
   pid.prev_error = error;
+  if(pid.output > MAX_TICKS_PER_SEC) pid.output = MAX_TICKS_PER_SEC;
+  if(pid.output < -MAX_TICKS_PER_SEC) pid.output = -MAX_TICKS_PER_SEC;
   return pid.output;
 }
 
