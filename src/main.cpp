@@ -24,6 +24,8 @@ const int pwmChannel2 = 1;
 // --- Encoder Counters ---
 volatile long left_enc_pos = 0;
 volatile long right_enc_pos = 0;
+volatile long curr_count_left = 0;
+volatile long curr_count_right = 0;
 
 volatile long prev_count_left = 0;
 volatile long prev_count_right = 0;
@@ -86,11 +88,15 @@ void IRAM_ATTR handleRightEncoder() {
 
 void updateMeasuredSpeeds()
 {
-  measured_speed_left = (left_enc_pos - prev_count_left) / CONTROL_INTERVAL;
-  measured_speed_right = (right_enc_pos - prev_count_right) / CONTROL_INTERVAL;
+  noInterrupts();
+  curr_count_left = left_enc_pos;
+  curr_count_right = right_enc_pos;
+  interrupts();
+  measured_speed_left = (float)(curr_count_left - prev_count_left) / CONTROL_INTERVAL;
+  measured_speed_right = (float)(curr_count_right - prev_count_right) / CONTROL_INTERVAL;
 
-  prev_count_left = left_enc_pos;
-  prev_count_right = right_enc_pos;
+  prev_count_left = curr_count_left;
+  prev_count_right = curr_count_right;
 }
 
 // PWM setup
