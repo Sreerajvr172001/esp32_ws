@@ -138,11 +138,10 @@ void apply_pwm_to_motor(int pwm, int in1, int in2, int ch) {
   }
 }
 
-int ticks_to_pwm(long ticks) {
+int ticks_to_pwm(float ticks) 
+{
+  if (fabsf(ticks) < 1.0f) return 0;
 
-
-  if (abs(ticks) < 1) return 0;
-\
   float ratio = (float)ticks / MAX_TICKS_PER_SEC;
   int p = (int)round(ratio * max_pwm);
 
