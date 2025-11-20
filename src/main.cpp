@@ -166,9 +166,14 @@ void process_command(const String &cmd) {
   if (c == 'm') {
     SERIAL_PORT.print("OK\n");
     SERIAL_PORT.flush();    
-    long l = 0, r = 0;
-    int num = sscanf(s.c_str(), "m %ld %ld", &l, &r);
-    if (num == 2) {
+    float l = 0, r = 0;
+    int num = sscanf(s.c_str(), "m %f %f", &l, &r);
+    if (num == 2) 
+    {
+      if(l > MAX_TICKS_PER_SEC) l = MAX_TICKS_PER_SEC;
+      if(l < -MAX_TICKS_PER_SEC) l = -MAX_TICKS_PER_SEC;
+      if(r > MAX_TICKS_PER_SEC) r = MAX_TICKS_PER_SEC;
+      if(r < -MAX_TICKS_PER_SEC) r = -MAX_TICKS_PER_SEC;
       noInterrupts();
       setpoint_ticks_l = l;
       setpoint_ticks_r = r;
@@ -176,7 +181,7 @@ void process_command(const String &cmd) {
       last_millis_cmd = millis();
       //int pwml = ticks_to_pwm(l);
       //int pwr = ticks_to_pwm(r);
-      Serial.printf("Setpoint_L: %d  Setpoint_R: %d", l, r);
+      Serial.printf("Setpoint_L: %f  Setpoint_R: %f", l, r);
       Serial.println();
       //apply_pwm_to_motor(pwml, MOTOR_LEFT_IN1, MOTOR_LEFT_IN2, pwmChannel2);
       //apply_pwm_to_motor(pwr, MOTOR_RIGHT_IN1, MOTOR_RIGHT_IN2, pwmChannel1);
