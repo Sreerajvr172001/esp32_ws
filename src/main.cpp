@@ -53,7 +53,7 @@ PIDController pid_left = {1.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 PIDController pid_right = {1.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
 const float CONTROL_INTERVAL = 0.02; //50Hz
-long last_control_time = 0;
+static unsigned long last_control_time = 0; //For PID Control timing
 
 // Serial interface
 HardwareSerial SERIAL_PORT(2);  //#define SERIAL_PORT Serial2
@@ -315,8 +315,8 @@ void loop() {
   }
 
   // --- PID Control Loop ---
-  unsigned long now = millis();
-  if (now - last_control_time >= CONTROL_INTERVAL * 1000) 
+  unsigned long now = micros();
+  if (now - last_control_time >= 20000) 
   {
     last_control_time = now;
 
