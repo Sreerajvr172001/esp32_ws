@@ -54,6 +54,7 @@ PIDController pid_right = {1.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
 const float CONTROL_INTERVAL = 0.02; //50Hz
 static unsigned long last_control_time = 0; //For PID Control timing
+static unsigned long last_speed_time = 0; //For speed measurement timing
 
 // Serial interface
 HardwareSerial SERIAL_PORT(2);  //#define SERIAL_PORT Serial2
@@ -92,9 +93,15 @@ void updateMeasuredSpeeds()
   curr_count_left = left_enc_pos;
   curr_count_right = right_enc_pos;
   interrupts();
-  measured_speed_left = (float)(curr_count_left - prev_count_left) / CONTROL_INTERVAL;
-  measured_speed_right = (float)(curr_count_right - prev_count_right) / CONTROL_INTERVAL;
-
+  unsigned long now = micros();
+  float dt = (now - last_speed_time)/1e6;
+  last_speed_time = now;
+  if(dt - 0.0001f)
+  {
+    measured_speed_left = (float)(curr_count_left - prev_count_left) / dt;
+    measured_speed_right = (float)(curr_count_right - prev_count_right) / dt;
+  }
+  
   prev_count_left = curr_count_left;
   prev_count_right = curr_count_right;
 }
@@ -319,7 +326,6 @@ void loop() {
   if (now - last_control_time >= 20000) 
   {
     last_control_time = now;
-
     updateMeasuredSpeeds();
 
     // Compute PID outputs
