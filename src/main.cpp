@@ -82,7 +82,7 @@ void updateMeasuredSpeeds()
   unsigned long now = micros();
   float dt = (now - last_speed_time)/1e6;
   last_speed_time = now;
-  if(dt - 0.0001f)
+  if(dt > 0.0001f)
   {
     measured_speed_left = (float)(curr_count_left - prev_count_left) / dt;
     measured_speed_right = (float)(curr_count_right - prev_count_right) / dt;
