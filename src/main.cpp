@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include"encoder_pcnt.hpp"
 
 // --- Motor Pin Definitions ---
 #define MOTOR_RIGHT_IN1 25
@@ -14,12 +15,6 @@ const int pwmFreq = 1000;
 const int pwmResolution = 8;
 const int pwmChannel1 = 0;
 const int pwmChannel2 = 1;
-
-// --- Encoder Pins ---
-#define LEFT_ENC_PIN_A 32
-#define LEFT_ENC_PIN_B 33
-#define RIGHT_ENC_PIN_A 22
-#define RIGHT_ENC_PIN_B 23
 
 // --- Encoder Counters ---
 volatile long left_enc_pos = 0;
@@ -76,23 +71,18 @@ const int max_pwm = 255;
 // Command buffer
 String rxbuf = "";
 
-// ISR handlers
-void IRAM_ATTR handleLeftEncoder() {
-  if (digitalRead(LEFT_ENC_PIN_B) == HIGH) left_enc_pos++;
-  else left_enc_pos--;
-}
-
-void IRAM_ATTR handleRightEncoder() {
-  if (digitalRead(RIGHT_ENC_PIN_B) == HIGH) right_enc_pos++;
-  else right_enc_pos--;
-}
-
 void updateMeasuredSpeeds()
 {
-  noInterrupts();
-  curr_count_left = left_enc_pos;
-  curr_count_right = right_enc_pos;
-  interrupts();
+  if(last_speed_time == 0)
+  {
+    last_speed_time = micros();
+    prev_count_left = get_left_encoder_count();
+    prev_count_right = get_right_encoder_count();
+    return;
+  }
+  curr_count_left = get_left_encoder_count();
+  curr_count_right = get_right_encoder_count();
+  
   unsigned long now = micros();
   float dt = (now - last_speed_time)/1e6;
   last_speed_time = now;
@@ -184,10 +174,8 @@ void process_command(const String &cmd) {
       if(l < -MAX_TICKS_PER_SEC) l = -MAX_TICKS_PER_SEC;
       if(r > MAX_TICKS_PER_SEC) r = MAX_TICKS_PER_SEC;
       if(r < -MAX_TICKS_PER_SEC) r = -MAX_TICKS_PER_SEC;
-      noInterrupts();
       setpoint_ticks_l = l;
       setpoint_ticks_r = r;
-      interrupts();
       last_millis_cmd = millis();
       //int pwml = ticks_to_pwm(l);
       //int pwr = ticks_to_pwm(r);
@@ -201,10 +189,10 @@ void process_command(const String &cmd) {
   else if (c == 'e') 
   {
     int l, r;
-    noInterrupts();
-    l = left_enc_pos;
-    r = right_enc_pos;
-    interrupts();
+  
+    l = get_left_encoder_count();
+    r = get_right_encoder_count();
+    
 
     SERIAL_PORT.printf("%d %d\n", l, r);
     SERIAL_PORT.flush();
@@ -218,10 +206,10 @@ void process_command(const String &cmd) {
   } 
   else if (c == 'r') 
   {
-    noInterrupts();
-    left_enc_pos = 0;
-    right_enc_pos = 0;
-    interrupts();
+    clear_left_counter();
+    clear_right_counter();
+    SERIAL_PORT.print("OK\r\n");
+
   } 
   else if (c == 'l') 
   {
@@ -275,13 +263,7 @@ void setup() {
   pinMode(MOTOR_LEFT_IN1, OUTPUT);
   pinMode(MOTOR_LEFT_IN2, OUTPUT);
 
-  pinMode(LEFT_ENC_PIN_A, INPUT_PULLUP);
-  pinMode(LEFT_ENC_PIN_B, INPUT_PULLUP);
-  pinMode(RIGHT_ENC_PIN_A, INPUT_PULLUP);
-  pinMode(RIGHT_ENC_PIN_B, INPUT_PULLUP);
-
-  attachInterrupt(digitalPinToInterrupt(LEFT_ENC_PIN_A), handleLeftEncoder, RISING);
-  attachInterrupt(digitalPinToInterrupt(RIGHT_ENC_PIN_A), handleRightEncoder, RISING);
+  encoder_init();
 
   setup_pwm_pins();
 
