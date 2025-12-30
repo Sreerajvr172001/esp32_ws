@@ -297,6 +297,10 @@ void loop() {
     last_millis_cmd = 0;
     apply_pwm_to_motor(0, MOTOR_LEFT_IN1, MOTOR_LEFT_IN2, pwmChannel2);
     apply_pwm_to_motor(0, MOTOR_RIGHT_IN1, MOTOR_RIGHT_IN2, pwmChannel1);
+    pid_left.integral = 0;
+    pid_right.integral = 0;
+    pid_left.prev_error = 0;
+    pid_right.prev_error = 0;
   }
 
   // --- PID Control Loop ---
