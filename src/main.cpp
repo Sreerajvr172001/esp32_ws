@@ -67,12 +67,12 @@ const int max_pwm = 255;
 String rxbuf = "";
 
 void updateMeasuredSpeeds(float dt)
-  {
+{
   curr_count_left = get_left_encoder_count();
   curr_count_right = get_right_encoder_count();
   
-    measured_speed_left = (float)(curr_count_left - prev_count_left) / dt;
-    measured_speed_right = (float)(curr_count_right - prev_count_right) / dt;
+  measured_speed_left = (float)(curr_count_left - prev_count_left) / dt;
+  measured_speed_right = (float)(curr_count_right - prev_count_right) / dt;  
   
   
   prev_count_left = curr_count_left;
@@ -80,7 +80,8 @@ void updateMeasuredSpeeds(float dt)
 }
 
 // PWM setup
-void setup_pwm_pins() {
+void setup_pwm_pins() 
+{
   ledcSetup(pwmChannel1, pwmFreq, pwmResolution);
   ledcAttachPin(MOTOR_RIGHT_ENA, pwmChannel1);
 
@@ -102,8 +103,8 @@ float computePID(PIDController &pid, float target, float measured, float dt)
   return pid.output;
 }
 
-void apply_pwm_to_motor(int pwm, int in1, int in2, int ch) {
-  
+void apply_pwm_to_motor(int pwm, int in1, int in2, int ch) 
+{  
   if (pwm > 0) {
     digitalWrite(in1, LOW);
     digitalWrite(in2, HIGH);
