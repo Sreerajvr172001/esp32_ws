@@ -261,13 +261,10 @@ void loop() {
   while (SERIAL_PORT.available()) {
     char c = SERIAL_PORT.read();
 
-    if (c == '\r' || c == '\n') {
-      if (rxbuf.length() > 0) {
-        // Print complete command to USB Serial monitor
-        //Serial.print("Received: ");
-        //Serial.println(rxbuf);
-
-        // Process the command
+    if (c == '\r' || c == '\n') 
+    {
+      if (rxbuf.length() > 0) 
+      {
         process_command(rxbuf);
         rxbuf = "";
       }
