@@ -258,7 +258,8 @@ void setup() {
 
 void loop() {
   // Read and process incoming commands
-  while (SERIAL_PORT.available()) {
+  while (SERIAL_PORT.available()) 
+  {
     char c = SERIAL_PORT.read();
 
     if (c == '\r' || c == '\n') 
@@ -268,7 +269,9 @@ void loop() {
         process_command(rxbuf);
         rxbuf = "";
       }
-    } else {
+    } 
+    else 
+    {
       rxbuf += c;
       // Prevent buffer overflow
       if (rxbuf.length() > 200) rxbuf = "";
