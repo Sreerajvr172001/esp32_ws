@@ -63,8 +63,10 @@ const float ENCODER_TICKS_PER_REV = 1056;
 const int min_pwm = 180;
 const int max_pwm = 255;
 
-// Command buffer
-String rxbuf = "";
+// Command buffer with fixed size to avoid heap fragmentation related issues
+char rxbuf[64];
+int rx_len = 0;
+static bool discard_frame = false;
 
 void updateMeasuredSpeeds(float dt)
 {
@@ -245,17 +247,30 @@ void loop() {
 
     if (c == '\r' || c == '\n') 
     {
-      if (rxbuf.length() > 0) 
+      if(discard_frame)
       {
-        process_command(rxbuf);
-        rxbuf = "";
+        // Discard this frame
+        rx_len = 0;
+        discard_frame = false;
+        continue;
       }
+      process_command(rxbuf);
+      rx_len = 0;
     } 
     else 
     {
-      rxbuf += c;
       // Prevent buffer overflow
-      if (rxbuf.length() > 200) rxbuf = "";
+      if(rx_len >= sizeof(rxbuf)-1)
+      {
+        rx_len = 0;
+        discard_frame = true;
+
+      }   
+      else
+      {
+        rxbuf[rx_len++] = c;
+        rxbuf[rx_len] = '\0'; // Null-terminate the string
+      } 
     }
   }
 
