@@ -159,12 +159,7 @@ void process_command(const String &cmd) {
       setpoint_ticks_l = l;
       setpoint_ticks_r = r;
       last_millis_cmd = millis();
-      //int pwml = ticks_to_pwm(l);
-      //int pwr = ticks_to_pwm(r);
-      //Serial.printf("Setpoint_L: %f  Setpoint_R: %f", l, r);
-      //Serial.println();
-      //apply_pwm_to_motor(pwml, MOTOR_LEFT_IN1, MOTOR_LEFT_IN2, pwmChannel2);
-      //apply_pwm_to_motor(pwr, MOTOR_RIGHT_IN1, MOTOR_RIGHT_IN2, pwmChannel1);
+
       
     }
   } 
@@ -179,11 +174,7 @@ void process_command(const String &cmd) {
     SERIAL_PORT.printf("%d %d\n", l, r);
     SERIAL_PORT.flush();
 
-    // Also print to ESP32 USB Serial monitor for debugging
-    //Serial.print("Encoder counts - Left: ");
-    //Serial.print(l);
-    //Serial.print(" Right: ");
-    //Serial.println(r);
+
 
   } 
   else if (c == 'r') 
