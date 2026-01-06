@@ -45,7 +45,6 @@ PIDController pid_right = {1.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
 const float CONTROL_INTERVAL = 0.02; //50Hz
 static unsigned long last_control_time = 0; //For PID Control timing
-static unsigned long last_speed_time = 0; //For speed measurement timing
 
 // Serial interface
 HardwareSerial SERIAL_PORT(2);  //#define SERIAL_PORT Serial2
@@ -67,23 +66,11 @@ const int max_pwm = 255;
 // Command buffer
 String rxbuf = "";
 
-void updateMeasuredSpeeds()
-{
-  if(last_speed_time == 0)
+void updateMeasuredSpeeds(float dt)
   {
-    last_speed_time = micros();
-    prev_count_left = get_left_encoder_count();
-    prev_count_right = get_right_encoder_count();
-    return;
-  }
   curr_count_left = get_left_encoder_count();
   curr_count_right = get_right_encoder_count();
   
-  unsigned long now = micros();
-  float dt = (now - last_speed_time)/1e6;
-  last_speed_time = now;
-  if(dt > 0.0001f)
-  {
     measured_speed_left = (float)(curr_count_left - prev_count_left) / dt;
     measured_speed_right = (float)(curr_count_right - prev_count_right) / dt;
   }
@@ -101,9 +88,8 @@ void setup_pwm_pins() {
   ledcAttachPin(MOTOR_LEFT_ENA, pwmChannel2);
 }
 
-float computePID(PIDController &pid, float target, float measured)
+float computePID(PIDController &pid, float target, float measured, float dt)
 {
-  float dt = CONTROL_INTERVAL;
   float error = target - measured;
   pid.integral += error * dt;
   if(pid.integral > MAX_TICKS_PER_SEC) pid.integral = MAX_TICKS_PER_SEC;
@@ -305,14 +291,24 @@ void loop() {
 
   // --- PID Control Loop ---
   unsigned long now = micros();
-  if (now - last_control_time >= 20000) 
+  if(last_control_time == 0)
   {
     last_control_time = now;
-    updateMeasuredSpeeds();
+    prev_count_left = get_left_encoder_count();
+    prev_count_right = get_right_encoder_count();
+    return;
+  }  
+
+  float dt = (now - last_control_time)/1e6; 
+  
+  if (dt >= CONTROL_INTERVAL) 
+  {
+    updateMeasuredSpeeds(dt);
+    last_control_time = now;
 
     // Compute PID outputs
-    float output_left = computePID(pid_left, setpoint_ticks_l, measured_speed_left);
-    float output_right = computePID(pid_right, setpoint_ticks_r, measured_speed_right);
+    float output_left = computePID(pid_left, setpoint_ticks_l, measured_speed_left, dt);
+    float output_right = computePID(pid_right, setpoint_ticks_r, measured_speed_right, dt);
     
     // Convert PID outputs to PWM values
     int pwm_left = ticks_to_pwm(output_left);
