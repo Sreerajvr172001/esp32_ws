@@ -74,7 +74,6 @@ void updateMeasuredSpeeds(float dt)
   measured_speed_left = (float)(curr_count_left - prev_count_left) / dt;
   measured_speed_right = (float)(curr_count_right - prev_count_right) / dt;  
   
-  
   prev_count_left = curr_count_left;
   prev_count_right = curr_count_right;
 }
@@ -144,7 +143,6 @@ void process_command(const String &cmd) {
   s.trim();
   if (s.length() == 0) return;
   char c = s.charAt(0);
-
   if (c == 'm') 
   {
     SERIAL_PORT.print("OK\n");
@@ -159,31 +157,22 @@ void process_command(const String &cmd) {
       if(r < -MAX_TICKS_PER_SEC) r = -MAX_TICKS_PER_SEC;
       setpoint_ticks_l = l;
       setpoint_ticks_r = r;
-      last_millis_cmd = millis();
-
-      
+      last_millis_cmd = millis();      
     }
   } 
   else if (c == 'e') 
   {
-    int l, r;
-  
+    int l, r;  
     l = get_left_encoder_count();
     r = get_right_encoder_count();
-    
-
     SERIAL_PORT.printf("%d %d\n", l, r);
     SERIAL_PORT.flush();
-
-
-
   } 
   else if (c == 'r') 
   {
     clear_left_counter();
     clear_right_counter();
     SERIAL_PORT.print("OK\r\n");
-
   } 
   else if (c == 'l') 
   {
