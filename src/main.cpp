@@ -73,7 +73,7 @@ void updateMeasuredSpeeds(float dt)
   
     measured_speed_left = (float)(curr_count_left - prev_count_left) / dt;
     measured_speed_right = (float)(curr_count_right - prev_count_right) / dt;
-  }
+  
   
   prev_count_left = curr_count_left;
   prev_count_right = curr_count_right;
