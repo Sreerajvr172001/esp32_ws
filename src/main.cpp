@@ -245,31 +245,38 @@ void loop() {
   {
     char c = SERIAL_PORT.read();
 
-    if (c == '\r' || c == '\n') 
+    //if discard_frame is set, ignore the incoming characters until '\n' or '\r' is found
+    if(discard_frame)
     {
-      if(discard_frame)
+      if(c == '\n' || c == '\r')
       {
-        // Discard this frame
         rx_len = 0;
         discard_frame = false;
-        continue;
       }
-      process_command(rxbuf);
-      rx_len = 0;
-    } 
+      continue;
+    }
     else 
     {
+      //normal operation: process the frame when endline character is found
+      if(c == '\n' || c == '\r') 
+      {
+        if(rx_len > 0)
+        {
+          rxbuf[rx_len] = '\0'; //null-terminate the string before processing
+          process_command(rxbuf);
+          rx_len = 0;
+        }
+        continue;
+      }
       // Prevent buffer overflow
       if(rx_len >= sizeof(rxbuf)-1)
       {
         rx_len = 0;
         discard_frame = true;
-
       }   
-      else
+      else //normal operation: append each character to buffer
       {
         rxbuf[rx_len++] = c;
-        rxbuf[rx_len] = '\0'; // Null-terminate the string
       } 
     }
   }
