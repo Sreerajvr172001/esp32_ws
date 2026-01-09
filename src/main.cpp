@@ -140,17 +140,15 @@ int ticks_to_pwm(float ticks)
 }
 
 
-void process_command(const String &cmd) {
-  String s = cmd;
-  s.trim();
-  if (s.length() == 0) return;
-  char c = s.charAt(0);
+void process_command(const char *cmd) {
+  if (cmd[0] == '\0') return;
+  char c = cmd[0];
   if (c == 'm') 
   {
     SERIAL_PORT.print("OK\n");
     SERIAL_PORT.flush();    
     float l = 0, r = 0;
-    int num = sscanf(s.c_str(), "m %f %f", &l, &r);
+    int num = sscanf(cmd, "m %f %f", &l, &r);
     if (num == 2) 
     {
       if(l > MAX_TICKS_PER_SEC) l = MAX_TICKS_PER_SEC;
@@ -179,7 +177,7 @@ void process_command(const String &cmd) {
   else if (c == 'l') 
   {
     float Kp=0, Ki=0, Kd=0;
-    int num = sscanf(s.c_str(), "l %f %f %f", &Kp, &Ki, &Kd);
+    int num = sscanf(cmd, "l %f %f %f", &Kp, &Ki, &Kd);
     if (num >= 1) 
     {
       pid_left.Kp = Kp;
@@ -197,7 +195,7 @@ void process_command(const String &cmd) {
   else if (c == 'n') 
   {
     float Kp=0, Ki=0, Kd=0;
-    int num = sscanf(s.c_str(), "n %f %f %f", &Kp, &Ki, &Kd);
+    int num = sscanf(cmd, "n %f %f %f", &Kp, &Ki, &Kd);
     if (num >= 1) 
     {
       pid_right.Kp = Kp;
