@@ -189,7 +189,7 @@ void process_command(const char *cmd) {
       {
         pid_left.Kd = Kd;
       }
-      SERIAL_PORT.printf("LEFT PID UPDATED: %.3f, %.3f, %.3f\r\n", Kp, Ki, Kd);
+      SERIAL_PORT.printf("LEFT PID UPDATED: %.3f, %.3f, %.3f\r\n", pid_left.Kp, pid_left.Ki, pid_left.Kd);
     }
   } 
   else if (c == 'n') 
@@ -207,7 +207,7 @@ void process_command(const char *cmd) {
       {
         pid_right.Kd = Kd;
       }
-      SERIAL_PORT.printf("RIGHT PID UPDATED: %.3f, %.3f, %.3f\r\n", Kp, Ki, Kd);
+      SERIAL_PORT.printf("RIGHT PID UPDATED: %.3f, %.3f, %.3f\r\n", pid_right.Kp, pid_right.Ki, pid_right.Kd);
     }
   } 
   else if (c == 'p') 
