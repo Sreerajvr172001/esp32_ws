@@ -145,8 +145,7 @@ void process_command(const char *cmd) {
   char c = cmd[0];
   if (c == 'm') 
   {
-    SERIAL_PORT.print("OK\n");
-    SERIAL_PORT.flush();    
+    SERIAL_PORT.print("OK\n");   
     float l = 0, r = 0;
     int num = sscanf(cmd, "m %f %f", &l, &r);
     if (num == 2) 
@@ -166,7 +165,6 @@ void process_command(const char *cmd) {
     l = get_left_encoder_count();
     r = get_right_encoder_count();
     SERIAL_PORT.printf("%d %d\n", l, r);
-    SERIAL_PORT.flush();
   } 
   else if (c == 'r') 
   {
