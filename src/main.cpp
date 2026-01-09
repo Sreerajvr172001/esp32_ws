@@ -147,18 +147,19 @@ void process_command(const char *cmd) {
   char c = cmd[0];
   if (c == 'm') 
   {
-    SERIAL_PORT.print("OK\n");   
     float l = 0, r = 0;
     int num = sscanf(cmd, "m %f %f", &l, &r);
     if (num == 2) 
     {
+      
       if(l > MAX_TICKS_PER_SEC) l = MAX_TICKS_PER_SEC;
       if(l < -MAX_TICKS_PER_SEC) l = -MAX_TICKS_PER_SEC;
       if(r > MAX_TICKS_PER_SEC) r = MAX_TICKS_PER_SEC;
       if(r < -MAX_TICKS_PER_SEC) r = -MAX_TICKS_PER_SEC;
       setpoint_ticks_l = l;
       setpoint_ticks_r = r;
-      last_millis_cmd = millis();      
+      last_millis_cmd = millis();
+      SERIAL_PORT.print("OK\n");         
     }
   } 
   else if (c == 'e') 
