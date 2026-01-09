@@ -161,6 +161,10 @@ void process_command(const char *cmd) {
       last_millis_cmd = millis();
       SERIAL_PORT.print("OK\n");         
     }
+    else
+    {
+      SERIAL_PORT.print("ERROR IN MOTOR COMMANDS: NO. OF MOTOR COMMANDS NOT EQUAL TO 2");
+    }
   } 
   else if (c == 'e') 
   {
