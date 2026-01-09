@@ -177,7 +177,7 @@ void process_command(const char *cmd) {
   {
     clear_left_counter();
     clear_right_counter();
-    SERIAL_PORT.print("OK\r\n");
+    SERIAL_PORT.print("OK\n");
   } 
   else if (c == 'l') 
   {
@@ -194,7 +194,7 @@ void process_command(const char *cmd) {
       {
         pid_left.Kd = Kd;
       }
-      SERIAL_PORT.printf("LEFT PID UPDATED: %.3f, %.3f, %.3f\r\n", pid_left.Kp, pid_left.Ki, pid_left.Kd);
+      SERIAL_PORT.printf("LEFT PID UPDATED: %.3f, %.3f, %.3f\n", pid_left.Kp, pid_left.Ki, pid_left.Kd);
     }
   } 
   else if (c == 'n') 
@@ -212,16 +212,16 @@ void process_command(const char *cmd) {
       {
         pid_right.Kd = Kd;
       }
-      SERIAL_PORT.printf("RIGHT PID UPDATED: %.3f, %.3f, %.3f\r\n", pid_right.Kp, pid_right.Ki, pid_right.Kd);
+      SERIAL_PORT.printf("RIGHT PID UPDATED: %.3f, %.3f, %.3f\n", pid_right.Kp, pid_right.Ki, pid_right.Kd);
     }
   } 
   else if (c == 'p') 
   {
-    SERIAL_PORT.print("OK\r\n");
+    SERIAL_PORT.print("OK\n");
   }
   else
   {
-    SERIAL_PORT.print("ERR Unknown Command\r\n");
+    SERIAL_PORT.print("ERR Unknown Command\n");
     return;
   }
 }
