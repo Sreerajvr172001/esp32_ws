@@ -212,6 +212,11 @@ void process_command(const char *cmd) {
   {
     SERIAL_PORT.print("OK\r\n");
   }
+  else
+  {
+    SERIAL_PORT.print("ERR Unknown Command\r\n");
+    return;
+  }
 }
 
 
