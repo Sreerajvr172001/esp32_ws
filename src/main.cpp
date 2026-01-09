@@ -141,7 +141,7 @@ int ticks_to_pwm(float ticks)
 
 
 void process_command(const char *cmd) {
-  if (cmd[0] == '\0') return;
+  if (!cmd || cmd[0] == '\0') return;
   char c = cmd[0];
   if (c == 'm') 
   {
