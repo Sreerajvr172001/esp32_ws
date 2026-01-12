@@ -17,10 +17,10 @@ const int pwmChannel1 = 0;
 const int pwmChannel2 = 1;
 
 // --- Encoder Counters ---
- int16_t curr_count_right = 0;
- int16_t curr_count_left = 0;
- int16_t prev_count_left = 0;
- int16_t prev_count_right = 0;
+ int32_t curr_count_right = 0;
+ int32_t curr_count_left = 0;
+ int32_t prev_count_left = 0;
+ int32_t prev_count_right = 0;
  float measured_speed_left = 0;
  float measured_speed_right = 0;
 
