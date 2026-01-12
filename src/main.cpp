@@ -196,6 +196,10 @@ void process_command(const char *cmd) {
       }
       SERIAL_PORT.printf("LEFT PID UPDATED: %.3f, %.3f, %.3f\r\n", pid_left.Kp, pid_left.Ki, pid_left.Kd);
     }
+    else
+    {
+      SERIAL_PORT.print("ERROR IN LEFT PID COMMAND: INSUFFICIENT PARAMETERS\r\n");
+    }
   } 
   else if (c == 'n') 
   {
@@ -213,6 +217,10 @@ void process_command(const char *cmd) {
         pid_right.Kd = Kd;
       }
       SERIAL_PORT.printf("RIGHT PID UPDATED: %.3f, %.3f, %.3f\r\n", pid_right.Kp, pid_right.Ki, pid_right.Kd);
+    }
+    else
+    {
+      SERIAL_PORT.print("ERROR IN RIGHT PID COMMAND: INSUFFICIENT PARAMETERS\r\n");
     }
   } 
   else if (c == 'p') 
