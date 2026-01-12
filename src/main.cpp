@@ -94,13 +94,13 @@ void setup_pwm_pins()
   ledcAttachPin(MOTOR_LEFT_ENA, pwmChannel2);
 }
 
-float computePID(PIDController &pid, float target, float measured)
+float computePID(PIDController &pid, float target, float measured, float dt)
 {
   float error = target - measured;
-  pid.integral += error * CONTROL_INTERVAL;
+  pid.integral += error * dt;
   if(pid.integral > MAX_TICKS_PER_SEC) pid.integral = MAX_TICKS_PER_SEC;
   if(pid.integral < -MAX_TICKS_PER_SEC) pid.integral = -MAX_TICKS_PER_SEC;
-  float derivative = (error - pid.prev_error) / CONTROL_INTERVAL;
+  float derivative = (error - pid.prev_error) / dt;
   pid.output = pid.Kp * error + pid.Ki * pid.integral + pid.Kd * derivative;
   pid.prev_error = error;
   if(pid.output > MAX_TICKS_PER_SEC) pid.output = MAX_TICKS_PER_SEC;
@@ -375,8 +375,8 @@ void loop() {
     last_control_time = now;
 
     // Compute PID outputs
-    float output_left = computePID(pid_left, setpoint_ticks_l, measured_speed_left);
-    float output_right = computePID(pid_right, setpoint_ticks_r, measured_speed_right);
+    float output_left = computePID(pid_left, setpoint_ticks_l, measured_speed_left, dt);
+    float output_right = computePID(pid_right, setpoint_ticks_r, measured_speed_right, dt);
     
     // Convert PID outputs to PWM values
     int pwm_left = ticks_to_pwm(output_left);
