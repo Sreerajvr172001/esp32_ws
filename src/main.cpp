@@ -160,10 +160,12 @@ void process_command(const char *cmd) {
       setpoint_ticks_r = r;
       last_millis_cmd = millis();
       SERIAL_PORT.print("OK\r\n");         
+      return;    
     }
     else
     {
       SERIAL_PORT.print("ERROR IN MOTOR COMMANDS: NO. OF MOTOR COMMANDS NOT EQUAL TO 2\r\n");
+      return;
     }
   } 
   else if (c == 'e') 
@@ -172,12 +174,14 @@ void process_command(const char *cmd) {
     l = get_left_encoder_count();
     r = get_right_encoder_count();
     SERIAL_PORT.printf("%d %d\r\n", l, r);
+    return;
   } 
   else if (c == 'r') 
   {
     clear_left_counter();
     clear_right_counter();
     SERIAL_PORT.print("OK\r\n");
+    return;
   } 
   else if (c == 'l') 
   {
@@ -195,10 +199,12 @@ void process_command(const char *cmd) {
         pid_left.Kd = Kd;
       }
       SERIAL_PORT.printf("LEFT PID UPDATED: %.3f, %.3f, %.3f\r\n", pid_left.Kp, pid_left.Ki, pid_left.Kd);
+      return;
     }
     else
     {
       SERIAL_PORT.print("ERROR IN LEFT PID COMMAND: INSUFFICIENT PARAMETERS\r\n");
+      return;
     }
   } 
   else if (c == 'n') 
@@ -217,15 +223,18 @@ void process_command(const char *cmd) {
         pid_right.Kd = Kd;
       }
       SERIAL_PORT.printf("RIGHT PID UPDATED: %.3f, %.3f, %.3f\r\n", pid_right.Kp, pid_right.Ki, pid_right.Kd);
+      return;
     }
     else
     {
       SERIAL_PORT.print("ERROR IN RIGHT PID COMMAND: INSUFFICIENT PARAMETERS\r\n");
+      return;
     }
   } 
   else if (c == 'p') 
   {
     SERIAL_PORT.print("OK\r\n");
+    return;
   }
   else
   {
