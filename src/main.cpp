@@ -43,6 +43,10 @@ struct PIDController
 PIDController pid_left = {1.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 PIDController pid_right = {1.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
+#define KP_MAX 1.0f
+#define KI_MAX 0.5f
+#define KD_MAX 0.2f
+
 const float CONTROL_INTERVAL = 0.02; //50Hz
 static unsigned long last_control_time = 0; //For PID Control timing
 
@@ -187,6 +191,24 @@ void process_command(const char *cmd) {
   {
     float Kp=0, Ki=0, Kd=0;
     int num = sscanf(cmd, "l %f %f %f", &Kp, &Ki, &Kd);
+
+    //Validate PID parameters
+    if(!isfinite(Kp) || !isfinite(Ki) || !isfinite(Kd))
+    {
+      SERIAL_PORT.print("ERROR IN LEFT PID COMMAND: NON-FINITE PARAMETERS\r\n");  
+      return;
+    }
+    if(Kp < 0 || Ki < 0 || Kd < 0)
+    {
+      SERIAL_PORT.print("ERROR IN LEFT PID COMMAND: NEGATIVE PARAMETERS\r\n");
+      return;
+    }
+    if(Kp > KP_MAX || Ki > KI_MAX || Kd > KD_MAX)
+    {
+      SERIAL_PORT.print("ERROR IN LEFT PID COMMAND: PARAMETERS EXCEED MAX LIMIT\r\n");
+      return;
+    }
+
     if (num >= 1) 
     {
       pid_left.Kp = Kp;
@@ -211,6 +233,24 @@ void process_command(const char *cmd) {
   {
     float Kp=0, Ki=0, Kd=0;
     int num = sscanf(cmd, "n %f %f %f", &Kp, &Ki, &Kd);
+
+    //Validate PID parameters
+    if(!isfinite(Kp) || !isfinite(Ki) || !isfinite(Kd))
+    {
+      SERIAL_PORT.print("ERROR IN RIGHT PID COMMAND: NON-FINITE PARAMETERS\r\n");  
+      return;
+    }
+    if(Kp < 0 || Ki < 0 || Kd < 0)
+    {
+      SERIAL_PORT.print("ERROR IN RIGHT PID COMMAND: NEGATIVE PARAMETERS\r\n");
+      return;
+    }
+    if(Kp > KP_MAX || Ki > KI_MAX || Kd > KD_MAX)
+    {
+      SERIAL_PORT.print("ERROR IN RIGHT PID COMMAND: PARAMETERS EXCEED MAX LIMIT\r\n");
+      return;
+    }
+
     if (num >= 1) 
     {
       pid_right.Kp = Kp;
