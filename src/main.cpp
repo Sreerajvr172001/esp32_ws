@@ -192,32 +192,30 @@ void process_command(const char *cmd) {
     float Kp=0, Ki=0, Kd=0;
     int num = sscanf(cmd, "l %f %f %f", &Kp, &Ki, &Kd);
 
-    //Validate PID parameters
-    if(!isfinite(Kp) || !isfinite(Ki) || !isfinite(Kd))
-    {
-      SERIAL_PORT.print("ERROR IN LEFT PID COMMAND: NON-FINITE PARAMETERS\r\n");  
-      return;
-    }
-    if(Kp < 0 || Ki < 0 || Kd < 0)
-    {
-      SERIAL_PORT.print("ERROR IN LEFT PID COMMAND: NEGATIVE PARAMETERS\r\n");
-      return;
-    }
-    if(Kp > KP_MAX || Ki > KI_MAX || Kd > KD_MAX)
-    {
-      SERIAL_PORT.print("ERROR IN LEFT PID COMMAND: PARAMETERS EXCEED MAX LIMIT\r\n");
-      return;
-    }
-
     if (num >= 1) 
     {
+      if(!isfinite(Kp) || Kp < 0 || Kp > KP_MAX) //Validate Kp 
+      {
+        SERIAL_PORT.print("ERROR IN LEFT PID COMMAND: INVALID Kp PARAMETER\r\n");
+        return;
+      }
       pid_left.Kp = Kp;
       if (num >= 2) 
       {
+        if(!isfinite(Ki) || Ki < 0 || Ki > KI_MAX) //Validate Ki
+        {
+          SERIAL_PORT.print("ERROR IN LEFT PID COMMAND: INVALID Ki PARAMETER\r\n");
+          return;
+        }
         pid_left.Ki = Ki;
       } 
       if (num >= 3) 
       {
+        if(!isfinite(Kd) || Kd < 0 || Kd > KD_MAX) //Validate Kd
+        {
+          SERIAL_PORT.print("ERROR IN LEFT PID COMMAND: INVALID Kd PARAMETER\r\n");
+          return;
+        }
         pid_left.Kd = Kd;
       }
       SERIAL_PORT.printf("LEFT PID UPDATED: %.3f, %.3f, %.3f\r\n", pid_left.Kp, pid_left.Ki, pid_left.Kd);
@@ -234,32 +232,33 @@ void process_command(const char *cmd) {
     float Kp=0, Ki=0, Kd=0;
     int num = sscanf(cmd, "n %f %f %f", &Kp, &Ki, &Kd);
 
-    //Validate PID parameters
-    if(!isfinite(Kp) || !isfinite(Ki) || !isfinite(Kd))
-    {
-      SERIAL_PORT.print("ERROR IN RIGHT PID COMMAND: NON-FINITE PARAMETERS\r\n");  
-      return;
-    }
-    if(Kp < 0 || Ki < 0 || Kd < 0)
-    {
-      SERIAL_PORT.print("ERROR IN RIGHT PID COMMAND: NEGATIVE PARAMETERS\r\n");
-      return;
-    }
-    if(Kp > KP_MAX || Ki > KI_MAX || Kd > KD_MAX)
-    {
-      SERIAL_PORT.print("ERROR IN RIGHT PID COMMAND: PARAMETERS EXCEED MAX LIMIT\r\n");
-      return;
-    }
+    
+ 
 
     if (num >= 1) 
     {
+      if(!isfinite(Kp) || Kp < 0 || Kp > KP_MAX) //Validate Kp 
+      {
+        SERIAL_PORT.print("ERROR IN RIGHT PID COMMAND: INVALID Kp PARAMETER\r\n");
+        return;
+      }
       pid_right.Kp = Kp;
       if (num >= 2) 
       {
+        if(!isfinite(Ki) || Ki < 0 || Ki > KI_MAX) //Validate Ki
+        {
+          SERIAL_PORT.print("ERROR IN RIGHT PID COMMAND: INVALID Ki PARAMETER\r\n");
+          return;
+        }
         pid_right.Ki = Ki;
       } 
       if (num >= 3) 
       {
+        if(!isfinite(Kd) || Kd < 0 || Kd > KD_MAX) //Validate Kd
+        {
+          SERIAL_PORT.print("ERROR IN RIGHT PID COMMAND: INVALID Kd PARAMETER\r\n");
+          return;
+        }
         pid_right.Kd = Kd;
       }
       SERIAL_PORT.printf("RIGHT PID UPDATED: %.3f, %.3f, %.3f\r\n", pid_right.Kp, pid_right.Ki, pid_right.Kd);
