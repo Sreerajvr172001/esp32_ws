@@ -46,6 +46,7 @@ PIDController pid_right = {1.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 #define KP_MAX 1.0f
 #define KI_MAX 0.5f
 #define KD_MAX 0.2f
+#define MAX_INTEGRAL_TICKS 5000.0f
 
 const float CONTROL_INTERVAL = 0.02; //50Hz
 static unsigned long last_control_time = 0; //For PID Control timing
@@ -98,8 +99,8 @@ float computePID(PIDController &pid, float target, float measured, float dt)
 {
   float error = target - measured;
   pid.integral += error * dt;
-  if(pid.integral > MAX_TICKS_PER_SEC) pid.integral = MAX_TICKS_PER_SEC;
-  if(pid.integral < -MAX_TICKS_PER_SEC) pid.integral = -MAX_TICKS_PER_SEC;
+  if(pid.integral > MAX_INTEGRAL_TICKS) pid.integral = MAX_INTEGRAL_TICKS;
+  if(pid.integral < -MAX_INTEGRAL_TICKS) pid.integral = -MAX_INTEGRAL_TICKS;
   float derivative = (error - pid.prev_error) / dt;
   pid.output = pid.Kp * error + pid.Ki * pid.integral + pid.Kd * derivative;
   pid.prev_error = error;
