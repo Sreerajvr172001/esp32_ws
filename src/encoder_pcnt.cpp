@@ -54,12 +54,13 @@ int16_t get_right_encoder_count()
     return v;
 }
 
-void clear_right_counter()
+void clear_left_counter()
 {
     pcnt_counter_clear(PCNT_UNIT_0);
 }
 
-void clear_left_counter()
+void clear_right_counter()
 {
     pcnt_counter_clear(PCNT_UNIT_1);
 }
+
