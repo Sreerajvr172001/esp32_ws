@@ -36,12 +36,13 @@ struct PIDController
   float Ki;
   float Kd;
   float prev_error;
+  float prev_measure;
   float integral;
   float output;
 };
 
-PIDController pid_left = {1.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-PIDController pid_right = {1.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+PIDController pid_left = {1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+PIDController pid_right = {1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
 #define KP_MAX 1.0f
 #define KI_MAX 0.5f
@@ -101,7 +102,8 @@ float computePID(PIDController &pid, float target, float measured, float dt)
   pid.integral += error * dt;
   if(pid.integral > MAX_INTEGRAL_TICKS) pid.integral = MAX_INTEGRAL_TICKS;
   if(pid.integral < -MAX_INTEGRAL_TICKS) pid.integral = -MAX_INTEGRAL_TICKS;
-  float derivative = (error - pid.prev_error) / dt;
+  float derivative = -(measured - pid.prev_measure) / dt;
+  pid.prev_measure = measured;
   pid.output = pid.Kp * error + pid.Ki * pid.integral + pid.Kd * derivative;
   pid.prev_error = error;
   if(pid.output > MAX_TICKS_PER_SEC) pid.output = MAX_TICKS_PER_SEC;
