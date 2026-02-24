@@ -49,7 +49,7 @@ PIDController pid_right = {1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 #define KD_MAX 0.2f
 #define MAX_INTEGRAL_TICKS 5000.0f
 
-const float CONTROL_INTERVAL = 0.02; //50Hz
+const unsigned long CONTROL_INTERVAL = 20000; //20 ms in microseconds (50 Hz)
 static unsigned long last_control_time = 0; //For PID Control timing
 
 // Serial interface
@@ -370,9 +370,9 @@ void loop() {
     return;
   }  
 
-  float dt = (now - last_control_time)/1e6; 
+  unsigned long  dt_us = (now - last_control_time); //dt in microseconds (us)
   
-  if (dt >= CONTROL_INTERVAL) 
+  if (dt_us >= CONTROL_INTERVAL) 
   {
     updateMeasuredSpeeds(dt);
     last_control_time = now;
