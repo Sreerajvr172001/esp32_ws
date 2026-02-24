@@ -51,6 +51,7 @@ PIDController pid_right = {1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
 const unsigned long CONTROL_INTERVAL = 20000; //20 ms in microseconds (50 Hz)
 static unsigned long last_control_time = 0; //For PID Control timing
+const float dt = 0.02; //ideal dt = 20 ms (in seconds for better PID and Speed calculation)
 
 // Serial interface
 HardwareSerial SERIAL_PORT(2);  //#define SERIAL_PORT Serial2
@@ -374,8 +375,8 @@ void loop() {
   
   if (dt_us >= CONTROL_INTERVAL) 
   {
-    updateMeasuredSpeeds(dt);
-    last_control_time = now;
+    updateMeasuredSpeeds(dt); // use ideal dt for speed calculation to avoid noise from small dt variations
+    last_control_time += CONTROL_INTERVAL; //forcing ideal CONTROL_INTERVAL instead of actual CONTROL_INTERVAL to avoid piling up of timing drifts 
 
     // Compute PID outputs
     float output_left = computePID(pid_left, setpoint_ticks_l, measured_speed_left, dt);
