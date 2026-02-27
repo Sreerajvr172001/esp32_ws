@@ -21,6 +21,8 @@ int16_t curr_count_right = 0;
 int16_t curr_count_left = 0;
 int16_t prev_count_left = 0;
 int16_t prev_count_right = 0;
+int64_t total_count_left = 0;
+int64_t total_count_right = 0;
 float measured_speed_left = 0;
 float measured_speed_right = 0;
 
@@ -84,6 +86,9 @@ void updateMeasuredSpeeds(float dt)
 {
   curr_count_left = get_left_encoder_count();
   curr_count_right = get_right_encoder_count();
+
+  total_count_left += curr_count_left - prev_count_left;
+  total_count_right += curr_count_right - prev_count_right;
   
   measured_speed_left = (float)(curr_count_left - prev_count_left) / dt;
   measured_speed_right = (float)(curr_count_right - prev_count_right) / dt;  
@@ -187,8 +192,8 @@ void process_command(const char *cmd) {
   else if (c == 'e') 
   {
     int l, r;  
-    l = get_left_encoder_count();
-    r = get_right_encoder_count();
+    l = total_count_left;
+    r = total_count_right;
     SERIAL_PORT.printf("%d %d\r\n", l, r);
     return;
   } 
