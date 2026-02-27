@@ -132,16 +132,11 @@ void apply_pwm_to_motor(int pwm, int in1, int in2, int ch)
 int ticks_to_pwm(float ticks) 
 {
   float ratio = (float)ticks / MAX_TICKS_PER_SEC;
-  int p = (int)round(ratio * max_pwm);
+  int p = (int)round(ratio * (max_pwm - min_pwm) + min_pwm); // Linear mapping from ticks to pwm range with min_pwm offset to ensure motion at low speeds
 
   // Clamp pwm to the min and max range
   if (p > max_pwm) p = max_pwm;
   if (p < -max_pwm) p = -max_pwm;
-
-  // If pwm is too small but non-zero, force it to min_pwm to ensure motion
-  if (p > 0 && p < min_pwm) p = min_pwm;
-  if (p < 0 && p > -min_pwm) p = -min_pwm;
-
   return p;
 }
 
