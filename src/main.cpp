@@ -66,7 +66,7 @@ HardwareSerial SERIAL_PORT(2);  //#define SERIAL_PORT Serial2
 #define SERIAL2_TX 17 
 
 // Watchdog timeout (ms)
-const unsigned long WATCHDOG_MS = 2000;
+const unsigned long WATCHDOG_MS = 500;
 
 // Mapping ticks/sec range
 const float MAX_TICKS_PER_SEC = 2000;
