@@ -191,10 +191,10 @@ void process_command(const char *cmd) {
   } 
   else if (c == 'e') 
   {
-    int l, r;  
+    int64_t l, r;  
     l = total_count_left;
     r = total_count_right;
-    SERIAL_PORT.printf("%d %d\r\n", l, r);
+    SERIAL_PORT.printf("%lld %lld\r\n", l, r);
     return;
   } 
   else if (c == 'r') 
