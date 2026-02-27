@@ -23,6 +23,9 @@ const int pwmChannel2 = 1;
  int16_t prev_count_right = 0;
  float measured_speed_left = 0;
  float measured_speed_right = 0;
+ float final_speed_left = 0;
+ float final_speed_right = 0;
+ float alpha = 0.2; //smoothing factor for IIR filter on speed measurements
 
 // --- State Variables ---
  float setpoint_ticks_l = 0;
@@ -85,6 +88,9 @@ void updateMeasuredSpeeds(float dt)
   
   prev_count_left = curr_count_left;
   prev_count_right = curr_count_right;
+
+  final_speed_left = alpha * measured_speed_left + (1 - alpha) * final_speed_left; // IIR filter to smooth the speed measurements and reduce noise, alpha is the smoothing factor (0 < alpha < 1)
+  final_speed_right = alpha * measured_speed_right + (1 - alpha) * final_speed_right;
 }
 
 // PWM setup
@@ -381,8 +387,8 @@ void loop() {
     last_control_time += CONTROL_INTERVAL; //forcing ideal CONTROL_INTERVAL instead of actual CONTROL_INTERVAL to avoid piling up of timing drifts 
 
     // Compute PID outputs
-    float output_left = computePID(pid_left, setpoint_ticks_l, measured_speed_left, dt);
-    float output_right = computePID(pid_right, setpoint_ticks_r, measured_speed_right, dt);
+    float output_left = computePID(pid_left, setpoint_ticks_l, final_speed_left, dt);
+    float output_right = computePID(pid_right, setpoint_ticks_r, final_speed_right, dt);
     
     // Convert PID outputs to PWM values
     int pwm_left = ticks_to_pwm(output_left);
