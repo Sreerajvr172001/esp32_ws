@@ -133,7 +133,7 @@ int ticks_to_pwm(float ticks)
 {
   float abs_ticks = fabs(ticks);
   
-  if(abs_ticks < 1.0f) return 0; // return 0 PWM if ticks are very low to avoid motor stalling and unnecessary power consumption at very low speeds and also to stop the motor when the setpoint is zero or close to zero, which can help with stability and reduce wear on the motor. This also creates a small deadzone around zero to prevent oscillations at low speeds.
+  if(abs_ticks < 1.0f) return 0; // return 0 PWM if ticks are very low to avoid motor stalling and unnecessary power consumption at very low speeds and also to stop the motor when the setpoint is zero or close to zero.
 
   float ratio = (float)abs_ticks / MAX_TICKS_PER_SEC;
   int p = (int)round(ratio * (max_pwm - min_pwm) + min_pwm); // Linear mapping from ticks to pwm range with min_pwm offset to ensure motion at low speeds
