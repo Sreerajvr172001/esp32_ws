@@ -386,7 +386,7 @@ void loop() {
   if (dt_us >= CONTROL_INTERVAL) 
   {
     updateMeasuredSpeeds(dt); // use ideal dt for speed calculation to avoid noise from small dt variations
-    last_control_time += CONTROL_INTERVAL; //forcing ideal CONTROL_INTERVAL instead of actual CONTROL_INTERVAL to avoid piling up of timing drifts 
+    last_control_time = now;
 
     // Compute PID outputs
     float output_left = computePID(pid_left, setpoint_ticks_l, final_speed_left, dt);
