@@ -25,7 +25,7 @@ float measured_speed_left = 0;
 float measured_speed_right = 0;
 
 // --- IIR Filter ---
-float alpha = 0.2; 
+float alpha = 0.6; 
 float final_speed_left = 0;
 float final_speed_right = 0;
 
