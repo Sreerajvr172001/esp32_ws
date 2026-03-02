@@ -378,6 +378,8 @@ void loop() {
     pid_right.prev_error = 0;
     setpoint_ticks_l = 0;
     setpoint_ticks_r = 0;
+    pid_left.prev_measure = 0;
+    pid_right.prev_measure = 0;
     SERIAL_PORT.print("WATCHDOG TRIGGERED: MOTORS STOPPED\r\n");
   }
 
