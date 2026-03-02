@@ -21,6 +21,8 @@ int16_t curr_count_right = 0;
 int16_t curr_count_left = 0;
 int16_t prev_count_left = 0;
 int16_t prev_count_right = 0;
+int16_t delta_l = 0;
+int16_t delta_r = 0;
 int64_t total_count_left = 0;
 int64_t total_count_right = 0;
 float measured_speed_left = 0;
@@ -87,11 +89,14 @@ void updateMeasuredSpeeds(float dt)
   curr_count_left = get_left_encoder_count();
   curr_count_right = get_right_encoder_count();
 
-  total_count_left += curr_count_left - prev_count_left;
-  total_count_right += curr_count_right - prev_count_right;
+  delta_l = (int16_t)(curr_count_left - prev_count_left);
+  delta_r = (int16_t)(curr_count_right - prev_count_right);
+
+  total_count_left += delta_l;
+  total_count_right += delta_r;
   
-  measured_speed_left = (float)(curr_count_left - prev_count_left) / dt;
-  measured_speed_right = (float)(curr_count_right - prev_count_right) / dt;  
+  measured_speed_left = (float)delta_l / dt;
+  measured_speed_right = (float)delta_r / dt;  
   
   prev_count_left = curr_count_left;
   prev_count_right = curr_count_right;
