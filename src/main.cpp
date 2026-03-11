@@ -254,9 +254,6 @@ void process_command(const char *cmd) {
     float Kp=0, Ki=0, Kd=0;
     int num = sscanf(cmd, "n %f %f %f", &Kp, &Ki, &Kd);
 
-    
- 
-
     if (num >= 1) 
     {
       if(!isfinite(Kp) || Kp < 0 || Kp > KP_MAX) //Validate Kp 
