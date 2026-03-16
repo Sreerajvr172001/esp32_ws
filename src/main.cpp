@@ -151,7 +151,7 @@ int ticks_to_pwm(float ticks)
 {
   float abs_ticks = fabs(ticks);
   
-  if(abs_ticks < 1.0f) return 0; // return 0 PWM if ticks are very low to avoid motor stalling and unnecessary power consumption at very low speeds and also to stop the motor when the setpoint is zero or close to zero.
+  if(abs_ticks <=55.0f) return 0; // return 0 PWM if ticks are very low to avoid motor stalling and unnecessary power consumption at very low speeds and also to stop the motor when the setpoint is zero or close to zero.
 
   float ratio = (float)abs_ticks / MAX_TICKS_PER_SEC;
   int p = (int)round(ratio * (max_pwm - min_pwm) + min_pwm); // Linear mapping from ticks to pwm range with min_pwm offset to ensure motion at low speeds
@@ -412,7 +412,7 @@ void loop() {
     // Debugging output
     Serial.printf("Setpoints L:%f R:%f | Measured L:%f R:%f | PWM L:%d R:%d\n", 
                   setpoint_ticks_l, setpoint_ticks_r, 
-                  measured_speed_left, measured_speed_right, 
+                  final_speed_left, final_speed_right, 
                   pwm_left, pwm_right);
   }
   
