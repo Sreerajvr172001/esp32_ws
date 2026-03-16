@@ -86,14 +86,12 @@ static bool discard_frame = false;
 void updateMeasuredSpeeds(float dt)
 {
   curr_count_left = get_left_encoder_count();
+  clear_left_counter(); //clear counter immediately to avoid wrap around to 0
   curr_count_right = get_right_encoder_count();
+  clear_right_counter(); //clear counter immediately to avoid wrap around to 0  
 
-  //clear both encoder counters for avoiding wrap around to 0
-  clear_left_counter();
-  clear_right_counter(); 
-
-  delta_l = (int16_t)(curr_count_left - prev_count_left);
-  delta_r = (int16_t)(curr_count_right - prev_count_right);
+  delta_l = curr_count_left; //as we clear counter after each fetch curr_count_l itself is delta_l
+  delta_r = curr_count_right; //as we clear counter after each fetch curr_count_r itself is delta_r
 
   total_count_left += delta_l;
   total_count_right += delta_r;
