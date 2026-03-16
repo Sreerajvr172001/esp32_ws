@@ -19,8 +19,6 @@ const int pwmChannel2 = 1;
 // --- Encoder Counters ---
 int16_t curr_count_right = 0;
 int16_t curr_count_left = 0;
-int16_t prev_count_left = 0;
-int16_t prev_count_right = 0;
 int16_t delta_l = 0;
 int16_t delta_r = 0;
 int64_t total_count_left = 0;
@@ -98,9 +96,6 @@ void updateMeasuredSpeeds(float dt)
   
   measured_speed_left = (float)delta_l / dt;
   measured_speed_right = (float)delta_r / dt;  
-  
-  prev_count_left = curr_count_left;
-  prev_count_right = curr_count_right;
 
   final_speed_left = alpha * measured_speed_left + (1 - alpha) * final_speed_left; // IIR filter to smooth the speed measurements and reduce noise, alpha is the smoothing factor (0 < alpha < 1)
   final_speed_right = alpha * measured_speed_right + (1 - alpha) * final_speed_right;
@@ -380,8 +375,6 @@ void loop() {
     pid_right.prev_measure = 0;
     final_speed_left = 0;
     final_speed_right = 0;
-    prev_count_left = get_left_encoder_count();
-    prev_count_right = get_right_encoder_count();
     SERIAL_PORT.print("WATCHDOG TRIGGERED: MOTORS STOPPED\r\n");
   }
 
@@ -390,8 +383,6 @@ void loop() {
   if(last_control_time == 0)
   {
     last_control_time = now;
-    prev_count_left = get_left_encoder_count();
-    prev_count_right = get_right_encoder_count();
     return;
   }  
 
