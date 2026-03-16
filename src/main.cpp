@@ -74,7 +74,6 @@ const unsigned long WATCHDOG_MS = 500;
 
 // Mapping ticks/sec range
 const float MAX_TICKS_PER_SEC = 2000;
-const float ENCODER_TICKS_PER_REV = 1056;
 
 const int min_pwm = 180;
 const int max_pwm = 255;
