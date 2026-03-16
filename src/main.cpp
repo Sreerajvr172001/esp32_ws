@@ -88,6 +88,10 @@ void updateMeasuredSpeeds(float dt)
   curr_count_left = get_left_encoder_count();
   curr_count_right = get_right_encoder_count();
 
+  //clear both encoder counters for avoiding wrap around to 0
+  clear_left_counter();
+  clear_right_counter(); 
+
   delta_l = (int16_t)(curr_count_left - prev_count_left);
   delta_r = (int16_t)(curr_count_right - prev_count_right);
 
