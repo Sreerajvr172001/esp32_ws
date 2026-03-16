@@ -4,8 +4,8 @@
 
 #define RIGHT_ENC_PIN_A 32
 #define RIGHT_ENC_PIN_B 33
-#define LEFT_ENC_PIN_A  22
-#define LEFT_ENC_PIN_B  23
+#define LEFT_ENC_PIN_A  34
+#define LEFT_ENC_PIN_B  35
 
 const int16_t PCNT_MAX = 32767;
 const int16_t PCNT_MIN = -32768;
