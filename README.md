@@ -29,6 +29,8 @@ This firmware runs on the robot's low-level compute layer and handles motor cont
 | On-board computer | Raspberry Pi 4 8GB (ROS2 Humble) |
 | Communication | UART2 (GPIO16/17) at 115200 baud |
 | Debug serial | USB (GPIO1/3) at 115200 baud |
+### MK1 Hardware
+![DiffBot MK1](assets/mk1_hardware.jpg)
 
 ### Pin Mapping
 
